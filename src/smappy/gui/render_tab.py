@@ -1478,6 +1478,7 @@ class RenderTab(QWidget):
     def _bind_layer(self, index: int) -> None:
         """Point every control at one layer, without firing their signals."""
         layer = self.session.layers[index]
+        self.session.render_layer_index = index
         self.filter.layer_index = index
         widgets = (self.mode, self.track_column, self.line_width, self.lines_add,
                    self.sigma, self.sigma_y, self.factor, self.color, self.color_field,

@@ -1105,6 +1105,22 @@ class Plugin:
         """
         return None
 
+    def prepare_context(self, ctx: Context, settings) -> Context:
+        """Capture plugin-specific input on the GUI thread before work starts.
+
+        Return the context to hand to the worker. The default changes nothing;
+        a measurement can return a detached snapshot of its selected rows.
+        """
+        return ctx
+
+    def create_result_widget(self, panel):
+        """Optional GUI-only companion; ordinary plugins use Result figures.
+
+        Called once after the panel is built. Import Qt only in an override.
+        The companion can listen to panel.result_updated and panel.ended.
+        """
+        return None
+
     def keep(self, result: Result) -> Optional[Dict[str, Any]]:
         """What of this result is worth saving with the localization file.
 
@@ -1225,7 +1241,14 @@ def roots() -> List[Tuple[str, Path]]:
     putting their own at the same path.
     """
     from .. import config
-    found = [("builtin", BUILTIN_ROOT), (USER_ROOT, config.user_plugin_dir())]
+    found = [("builtin", BUILTIN_ROOT)]
+    # An editable checkout keeps its extensions under version control. This
+    # is relative to the imported package, never the process working folder.
+    checkout = Path(__file__).resolve().parents[3]
+    local = checkout / "user_plugins"
+    if (checkout / "pyproject.toml").is_file() and local.is_dir():
+        found.append(("checkout", local))
+    found.append((USER_ROOT, config.user_plugin_dir()))
     for directory in config.plugin_roots():
         found.append((str(directory), directory))
     return found

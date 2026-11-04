@@ -86,6 +86,7 @@ class PluginPanel(QWidget):
     # (`gui.live_session`) waits for.  A stopped run that kept a part of its
     # work is "done", its result saying `Result.stopped`.
     ended = Signal(str, object)
+    result_updated = Signal(object)
 
     def __init__(self, plugin_cls: Type[Plugin], session: Session, parent=None):
         super().__init__(parent)
@@ -276,6 +277,9 @@ class PluginPanel(QWidget):
         self._enable_parts()
         session.on_change(self._on_session)
         self._take_saved()
+        self.result_widget = self.plugin.create_result_widget(self)
+        if self.result_widget is not None:
+            layout.addWidget(self.result_widget)
 
     def release(self) -> None:
         """Stop listening to the session, for a panel about to be replaced
@@ -711,6 +715,12 @@ class PluginPanel(QWidget):
                                        stream=self.streamed.emit,
                                        grouping=self._runner.grouping,
                                        **context)
+        try:
+            context = self._runner.prepare_context(context, settings)
+        except Exception as error:
+            import traceback
+            self._on_failed(str(error), traceback.format_exc())
+            return False
         self._job = job
         # a run somebody asked for shows its figures when it is done; one
         # that nobody is there to answer (`start_run(ask=False)`) does not
@@ -1010,6 +1020,7 @@ class PluginPanel(QWidget):
             self.plot(raise_window=not following)
         elif result.figures() and self._live_figures:
             self.plot(raise_window=False)
+        self.result_updated.emit(result)
         self.ended.emit("done", result)
 
     def _on_failed(self, message: str, text: str) -> None:
