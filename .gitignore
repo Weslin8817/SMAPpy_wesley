@@ -1,6 +1,7 @@
 .venv/
 build/
 *.so
+*.pyd
 *.png
 # the icon PNGs ship in the wheel (package-data); scripts/make_icon.py draws them
 !src/smappy/data/icons/*.png
@@ -15,3 +16,8 @@ sim*.hdf5
 
 # uipsf's benchmark runs kept on one machine
 benchmarks/uipsf/results/*.local.jsonl
+
+# local environment setup records
+/ENVIRONMENT_PLAN.md
+/ENVIRONMENT_STATUS.md
+/ENVIRONMENT_PACKAGES.txt
