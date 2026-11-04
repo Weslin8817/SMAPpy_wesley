@@ -1,0 +1,43 @@
+{
+  "source_repository": "G:/SMAPpy_wes",
+  "source_version": "9",
+  "sha256": {
+    "centerline.py": "bb3ff0fa254c7214a306c3c8ff30c566853b7888e2713806be5c70f205a6b5b1",
+    "centerline_export.py": "d1a7a6bc49d7672f52981c938d79fc7fd59198f665891e0b040437d4b1e271e4",
+    "labeling_density.py": "f5b897424f63f1ac3c4bd1e00fecf255aa502b476591591bfd49310c712032c8",
+    "tube_density.py": "8e9426a4aab33a2d01e7e61304d613602378f1f8576794843e21b7bc1f9a4bf6"
+  },
+  "plugin_function_ast_sha256": {
+    "roi_coordinates": "312f98af350ef2b3d0544475890cb6077925db7fde51a92bea038ae60e166825",
+    "display_statistics": "c76edf0f2254d15a5aca486c1395dbd2633ad0604bc09b032aeebb66ebb4bcff",
+    "plots": "82d1529250c7d43e4cdee76e4aeaf05199d653fc1d4e26c475da9e9efcea4a0c",
+    "active": "595e164f5a11fafd3193ada286bfc00c46ca6c1a9a29f116296dc72f5bd7e1a2",
+    "run": "2957d2c7c29a493929968bab2172cb80d3eeb4b6a0643813c949064c1b05ae63"
+  },
+  "settings_defaults": {
+    "rejection": "None",
+    "maximum_distance_nm": 50.0,
+    "rejection_bins": 16,
+    "rejection_smoothing": 1.0,
+    "radial": true,
+    "dimension": "2D",
+    "bins": 16,
+    "smoothing": 1.0,
+    "density": true,
+    "density_dimension": "3D",
+    "density_bins": 16,
+    "density_smoothing": 1.0,
+    "segment_length_nm": 200.0,
+    "min_segment_events": 30,
+    "density_sensitivity": 0.25,
+    "radial_policy": "Model warning"
+  },
+  "source_commit": "ed55cbf9433edc2fe028561ad13a97f400efcf55",
+  "target_base_commit": "8839434f7286cd1f1d9f8720ba95171a1256b205",
+  "normalized_sha256": {
+    "centerline.py": "bb3ff0fa254c7214a306c3c8ff30c566853b7888e2713806be5c70f205a6b5b1",
+    "centerline_export.py": "7addfe764539ea70fb224c44e75e9e9da3bca65b4e42de7827258ccc2c13f073",
+    "labeling_density.py": "f5b897424f63f1ac3c4bd1e00fecf255aa502b476591591bfd49310c712032c8",
+    "tube_density.py": "bdfa0a7c9099787099af6ccbb6feecba4c4d368405e6928b74aea6516e10304a"
+  }
+}

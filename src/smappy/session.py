@@ -368,6 +368,7 @@ class Session:
         self._live_bounds: Dict[int, Tuple[Dict[str, Tuple], set]] = {}
         self.layers: List[Layer] = [Layer(self.tables)]
         self.roi: Optional[Region] = None          # the drawn 2D ROI (regions.py)
+        self.render_layer_index = 0              # selected Render control layer
         self._rois = None                          # the ROI manager's project
         # what was measured per region of an id column (a cluster's
         # `cluster_id`): column -> evaluation name -> `RegionTable`.  Read
