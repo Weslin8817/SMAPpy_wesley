@@ -77,7 +77,7 @@ class HandoffTask(QThread):
 
 def open_filter() -> str:
     """*File > Open*'s filter: the readers' tables and the images it takes."""
-    images = "*.tif *.tiff *.png"
+    images = "*.tif *.tiff *.png *.nd2 *.ND2 *.nD2 *.Nd2"
     tables, *rest = name_filter().split(";;")
     every = tables[tables.index("(") + 1:-1]
     return ";;".join([f"Localizations and images ({every} {images})", tables,

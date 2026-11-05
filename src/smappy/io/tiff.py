@@ -118,7 +118,7 @@ class ImageSource:
 
 
 def open_stack(path) -> ImageSource:
-    """Open an acquisition: a TIFF series, an NDTiff dataset, or single images.
+    """Open an acquisition: TIFF, NDTiff, Nikon ND2, or single images.
 
     Which one it is follows from what is there -- an NDTiff dataset is a
     directory with an ``NDTiff.index``, a one-file-per-frame acquisition is a
@@ -130,7 +130,10 @@ def open_stack(path) -> ImageSource:
     from .ndtiff import is_ndtiff, open_ndtiff   # NDTiff imports this module
     from .singles import is_single_image_set, open_singles
     from ..simulate.source import is_simulation, open_simulation
+    from .nd2 import is_nd2, open_nd2
 
+    if is_nd2(path):                 # before directory-based acquisition detection
+        return open_nd2(path)
     if is_simulation(path):          # a recipe: frames made as they are read
         return open_simulation(path)
     from .dcimg import is_dcimg, open_dcimg
@@ -222,19 +225,20 @@ STACK_SUFFIXES = (".tif", ".tiff")      # ".ome.tif" ends in one of them
 def is_image_stack(path) -> bool:
     """Whether `open_stack` would take ``path``, judged without opening it.
 
-    By name for a file -- a TIFF or a simulation recipe -- and by what is in
+    By name for a file -- a TIFF, ND2 or a simulation recipe -- and by what is in
     it for a folder: an NDTiff dataset (or any file of one), or TIFFs.  Cheap
     on purpose: a file dropped on a window is sorted with it before anything
     is read.
     """
     from .ndtiff import is_ndtiff
     from ..simulate.source import is_simulation
+    from .nd2 import is_nd2
 
     path = Path(path)
     if path.is_dir():
         return is_ndtiff(path) or any(next(path.glob(f"*{s}"), None) is not None
                                       for s in STACK_SUFFIXES)
-    return (path.name.lower().endswith(STACK_SUFFIXES) or is_simulation(path)
+    return (is_nd2(path) or path.name.lower().endswith(STACK_SUFFIXES) or is_simulation(path)
             or is_ndtiff(path))
 
 
@@ -397,7 +401,11 @@ def resolve_camera(source: ImageSource, camera: str = "",
             camera = scope.camera          # the microscope's camera, for a file that names none
     resolution = database().resolve(tags, camera=camera)
 
-    generic = _generic_values(tags)
+    # Non-MM readers may supply explicitly normalised values, including an
+    # empty dict. Do not guess MM amplifier/gain defaults for those sources.
+    generic = getattr(source, "camera_values", None)
+    if generic is None:
+        generic = _generic_values(tags)
     if resolution.camera is None:
         resolution = resolution.overlaid_with(
             generic, Source("metadata", "read without a camera entry"))

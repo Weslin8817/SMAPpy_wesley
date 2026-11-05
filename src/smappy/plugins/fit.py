@@ -32,7 +32,7 @@ from . import (Context, FormState, Notice, ParamInfo, Plot, Plugin, PreflightCho
 from .after_fit import AfterFitSettings, Finished, finish_localizations  # noqa: F401 (re-exported)
 
 # a simulation's recipe opens as an acquisition too (`smappy.simulate.source`)
-TIFF_FILTER = ("Image stacks (*.tif *.tiff *.ome.tif *.sim.yaml);;"
+TIFF_FILTER = ("Image stacks (*.tif *.tiff *.ome.tif *.nd2 *.ND2 *.nD2 *.Nd2 *.sim.yaml);;"
                "Simulations (*.sim.yaml);;All files (*)")
 #: Spline 3D's *focus*: where the focus is in the sample, and how it is known -- the pupil model drawn
 #: for it (`smappy.calibrate.depth`) -- or the beads' spline as it was calibrated, at the coverslip
@@ -49,7 +49,7 @@ class SourceSettings:
     path: str = param("", label="file", kind="open_file", file_filter=TIFF_FILTER,
                       help="any file of the acquisition: a Micro-Manager TIFF "
                            "series, an NDTiff directory, one image out of a "
-                           "folder written one file per frame, or a "
+                           "folder written one file per frame, a completed Nikon ND2, or a "
                            "simulation (*.sim.yaml, File > Simulate)")
     start: int = param(0, label="first frame", min=0, advanced=True,
                        help="frames before this one are skipped")
@@ -375,8 +375,11 @@ def default_output_path(source_path) -> Path:
     """
     from ..io.ndtiff import is_ndtiff
     from ..io.singles import is_single_image_set
+    from ..io.nd2 import is_nd2
 
     src = Path(source_path)
+    if is_nd2(src):
+        return src.with_name(f"{src.stem}_locs.hdf5")
     series = src.is_file() and src.name.lower().endswith((".ome.tif", ".ome.tiff"))
     if src.is_dir() or series or is_single_image_set(src) or is_ndtiff(src):
         folder = src if src.is_dir() else src.parent

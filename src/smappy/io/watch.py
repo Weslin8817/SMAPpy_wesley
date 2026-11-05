@@ -80,6 +80,8 @@ def watch_stack(path, chunk: int = 100, settings: Optional[WatchSettings] = None
     fit holding thousands of ROIs in its buffer fits them during a pause,
     rather than at the next frame, which may be minutes away.
     """
+    from .nd2 import reject_live_nd2
+    reject_live_nd2(path)
     settings = settings or WatchSettings()
     ndtiff = _wait_for_ndtiff(path, settings, stop_event)
     if ndtiff is not None:
@@ -172,6 +174,8 @@ def open_growing_stack(path, settings: Optional[WatchSettings] = None,
     the pipeline needs to be set up; its ``n_frames`` is only what had been
     written by the time it was opened.  Use `watch_stack` for the frames.
     """
+    from .nd2 import reject_live_nd2
+    reject_live_nd2(path)
     settings = settings or WatchSettings()
     ndtiff = _wait_for_ndtiff(path, settings, stop_event)
     if ndtiff is not None:
