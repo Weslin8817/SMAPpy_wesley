@@ -83,6 +83,7 @@ Homepage = "https://github.com/ries-lab/SMAPpy"
 Source = "https://github.com/ries-lab/SMAPpy"
 
 [project.optional-dependencies]
+nd2 = ["nd2>=0.10"]          # optional Nikon input; imported only when opened
 # matplotlib is a base dependency now, so `drift` is satisfied by a plain
 # install; it stays because the docs name it.
 image = ["pillow>=10.0"]       # save_image, for a picture without a window

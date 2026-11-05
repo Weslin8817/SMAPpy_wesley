@@ -41,7 +41,7 @@ RERUN = ("skip_identical", "always")
 FIGURES = ("png", "pdf", "svg", "none")
 FITTED = ("beside_image", "output")
 # what a folder rule looks for when it does not say
-PATTERNS = {"images": ["*.tif", "*.tiff"],
+PATTERNS = {"images": ["*.tif", "*.tiff", "*.[nN][dD]2"],
             "localizations": ["*.h5", "*.hdf5", "*_sml.mat", "*.csv"]}
 # the files a step's data is cut down to before it is written: enough for a
 # curve or a histogram's counts, not a column of a million localizations

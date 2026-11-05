@@ -66,6 +66,10 @@ image layer, as with *File → Open image*; and a longer stack (TIFF, an NDTiff
 folder, `*.sim.yaml`) becomes the *file* of the fitter on the Localize tab,
 ready to fit.
 
+Completed Nikon ND2 acquisitions can be opened directly for preview, fitting
+and Batch processing with the optional ND2 reader. See [ND2 input](docs/nd2.md)
+for installation, supported dimensions and validation.
+
 From a checkout, activate the venv first or run `.venv/bin/smappy-gui`.
 
 ## Tutorials and documentation
